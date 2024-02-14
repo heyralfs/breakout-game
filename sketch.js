@@ -7,7 +7,6 @@ let ball,
 	bricks = [];
 
 // mouse interaction helpers
-let isMoving = false;
 let isPressed = false;
 let accX, accY;
 
@@ -46,14 +45,9 @@ function setup() {
 function draw() {
 	background(0);
 
-	if (ball.velocity.mag() > 0) {
-		isMoving = true;
-	} else {
-		isMoving = false;
-	}
-
 	if (isPressed) {
-		stroke(255, 255, 0);
+		const strength = dist(accX, accY, mouseX, mouseY);
+		stroke(map(strength, 0, width, 50, 255));
 		line(accX, accY, mouseX, mouseY);
 		stroke(0);
 	}
@@ -93,15 +87,12 @@ function draw() {
 }
 
 function mousePressed() {
-	if (isMoving) return;
 	isPressed = true;
 	accX = mouseX;
 	accY = mouseY;
 }
 
 function mouseReleased() {
-	if (isMoving || !isPressed) return;
-
 	const acc = createVector(accX - mouseX, accY - mouseY);
 	if (acc.mag() > MAX_VELOCITY) {
 		acc.setMag(MAX_VELOCITY);
