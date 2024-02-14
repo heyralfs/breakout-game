@@ -1,29 +1,34 @@
-const DIAMETER = 12;
-
-const FRICTION = 0.015; // between 0 and 1
+const FRICTION = 0.01; // between 0 and 1
 
 const MIN_VELOCITY = 0.3;
-const MAX_VELOCITY = 20;
+const MAX_VELOCITY = 30;
 
 const INITIAL_VELOCITY = 0;
 
 class Ball {
-	constructor(x, y) {
-		// with vectors
+	constructor(x, y, diameter) {
 		this.position = createVector(x, y);
 		this.velocity = createVector(INITIAL_VELOCITY, INITIAL_VELOCITY);
+		this.diameter = diameter;
+		this.radius = diameter / 2;
 	}
 
 	draw() {
-		ellipse(this.position.x, this.position.y, DIAMETER, DIAMETER);
+		ellipse(this.position.x, this.position.y, this.diameter, this.diameter);
 	}
 
 	update() {
-		// check collision
-		if (this.position.x > width || this.position.x < 0) {
+		// check collision with walls
+		if (
+			this.position.x + this.radius > width ||
+			this.position.x - this.radius < 0
+		) {
 			this.velocity.x *= -1;
 		}
-		if (this.position.y > height || this.position.y < 0) {
+		if (
+			this.position.y + this.radius > height ||
+			this.position.y - this.radius < 0
+		) {
 			this.velocity.y *= -1;
 		}
 

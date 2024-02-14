@@ -1,28 +1,32 @@
-const BRICKS_AMOUNT = 0;
+const BRICKS_AMOUNT = 100;
+
+const COLLISION_DIST = 10;
 
 let ball,
 	bricks = [];
 
+// mouse interaction helpers
 let isMoving = false;
-
-// acceleration helpers
 let isPressed = false;
 let accX, accY;
 
 function setup() {
+	rectMode(CORNERS);
+	ellipseMode(CENTER);
+
 	const canvasSize = min(windowWidth, windowHeight) * 0.9;
 	createCanvas(canvasSize, canvasSize);
 
-	// create ball
-	ball = new Ball(width / 2, height / 2);
+	ball = new Ball(width / 2, height / 2, canvasSize / 50);
 
 	accX = ball.position.x;
 	accY = ball.position.y;
 
-	// create bricks
 	// todo: draw a grid and create each brick within a different cell
 	for (let i = 0; i < BRICKS_AMOUNT; i++) {
-		bricks.push(new Brick(random(0, width), random(0, height)));
+		bricks.push(
+			new Brick(random(0, width), random(0, height), canvasSize / 25)
+		);
 	}
 }
 
@@ -41,10 +45,36 @@ function draw() {
 		stroke(0);
 	}
 
-	// draw bricks
-	bricks.forEach((brick) => brick.draw());
+	bricks.forEach((brick) => {
+		if (!brick.active) return;
 
-	// draw ball
+		// checking x collision
+		if (
+			ball.position.y > brick.y1 &&
+			ball.position.y < brick.y2 &&
+			(abs(ball.position.x - brick.x1) < COLLISION_DIST ||
+				abs(ball.position.x - brick.x2) < COLLISION_DIST)
+		) {
+			ball.velocity.x *= -1;
+			brick.hide();
+			return;
+		}
+
+		// checking y collision
+		if (
+			ball.position.x > brick.x1 &&
+			ball.position.x < brick.x2 &&
+			(abs(ball.position.y - brick.y1) < COLLISION_DIST ||
+				abs(ball.position.y - brick.y2) < COLLISION_DIST)
+		) {
+			ball.velocity.y *= -1;
+			brick.hide();
+			return;
+		}
+
+		brick.draw();
+	});
+
 	ball.update();
 	ball.draw();
 }
