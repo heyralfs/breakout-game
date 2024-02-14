@@ -6,11 +6,11 @@ const MAX_VELOCITY = 30;
 const INITIAL_VELOCITY = 0;
 
 class Ball {
-	constructor(x, y, diameter) {
+	constructor({ x, y, radius }) {
 		this.position = createVector(x, y);
 		this.velocity = createVector(INITIAL_VELOCITY, INITIAL_VELOCITY);
-		this.diameter = diameter;
-		this.radius = diameter / 2;
+		this.radius = radius;
+		this.diameter = radius * 2;
 	}
 
 	draw() {

@@ -1,6 +1,6 @@
 const BRICKS_AMOUNT = 100;
 
-const COLLISION_DIST = 10;
+let ballRadius;
 
 let ball,
 	bricks = [];
@@ -17,7 +17,13 @@ function setup() {
 	const canvasSize = min(windowWidth, windowHeight) * 0.9;
 	createCanvas(canvasSize, canvasSize);
 
-	ball = new Ball(width / 2, height / 2, canvasSize / 50);
+	ballRadius = canvasSize / 100;
+
+	ball = new Ball({
+		x: width / 2,
+		y: height / 2,
+		radius: ballRadius,
+	});
 
 	accX = ball.position.x;
 	accY = ball.position.y;
@@ -52,8 +58,8 @@ function draw() {
 		if (
 			ball.position.y > brick.y1 &&
 			ball.position.y < brick.y2 &&
-			(abs(ball.position.x - brick.x1) < COLLISION_DIST ||
-				abs(ball.position.x - brick.x2) < COLLISION_DIST)
+			(abs(ball.position.x - brick.x1) < ballRadius ||
+				abs(ball.position.x - brick.x2) < ballRadius)
 		) {
 			ball.velocity.x *= -1;
 			brick.hide();
@@ -64,8 +70,8 @@ function draw() {
 		if (
 			ball.position.x > brick.x1 &&
 			ball.position.x < brick.x2 &&
-			(abs(ball.position.y - brick.y1) < COLLISION_DIST ||
-				abs(ball.position.y - brick.y2) < COLLISION_DIST)
+			(abs(ball.position.y - brick.y1) < ballRadius ||
+				abs(ball.position.y - brick.y2) < ballRadius)
 		) {
 			ball.velocity.y *= -1;
 			brick.hide();
