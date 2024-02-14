@@ -16,8 +16,7 @@ function setup() {
 	ellipseMode(CENTER);
 
 	const canvasSize = min(windowWidth, windowHeight) * 0.9;
-	const canvas = createCanvas(canvasSize, canvasSize);
-	canvas.mousePressed(mousePressedOnCanvas); // ignoring clicks outside canvas
+	createCanvas(canvasSize, canvasSize);
 
 	ballRadius = canvasSize / 100;
 
@@ -94,7 +93,7 @@ function draw() {
 	ball.draw();
 }
 
-function mousePressedOnCanvas() {
+function mousePressed() {
 	if (isMoving) return;
 	isPressed = true;
 	accX = mouseX;
