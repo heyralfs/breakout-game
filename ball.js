@@ -1,7 +1,7 @@
 const FRICTION = 0.01; // between 0 and 1
 
 const MIN_VELOCITY = 0.3;
-const MAX_VELOCITY = 30;
+const MAX_VELOCITY = 20;
 
 const INITIAL_VELOCITY = 0;
 

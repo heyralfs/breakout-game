@@ -1,5 +1,5 @@
 class Brick {
-	constructor(x, y, size) {
+	constructor({ x, y, size }) {
 		this.x1 = x;
 		this.y1 = y;
 		this.x2 = x + size;

@@ -1,4 +1,5 @@
-const BRICKS_AMOUNT = 100;
+const COLS = 20;
+const ROWS = 5;
 
 let ballRadius;
 
@@ -15,24 +16,32 @@ function setup() {
 	ellipseMode(CENTER);
 
 	const canvasSize = min(windowWidth, windowHeight) * 0.9;
-	createCanvas(canvasSize, canvasSize);
+	const canvas = createCanvas(canvasSize, canvasSize);
+	canvas.mousePressed(mousePressedOnCanvas); // ignoring clicks outside canvas
 
 	ballRadius = canvasSize / 100;
 
 	ball = new Ball({
 		x: width / 2,
-		y: height / 2,
+		y: height - 30,
 		radius: ballRadius,
 	});
 
 	accX = ball.position.x;
 	accY = ball.position.y;
 
-	// todo: draw a grid and create each brick within a different cell
-	for (let i = 0; i < BRICKS_AMOUNT; i++) {
-		bricks.push(
-			new Brick(random(0, width), random(0, height), canvasSize / 25)
-		);
+	const brickSize = canvasSize / COLS;
+
+	for (let i = 0; i < COLS; i++) {
+		for (let j = 0; j < ROWS; j++) {
+			bricks.push(
+				new Brick({
+					x: i * brickSize,
+					y: (j + 5) * brickSize,
+					size: brickSize,
+				})
+			);
+		}
 	}
 }
 
@@ -85,7 +94,7 @@ function draw() {
 	ball.draw();
 }
 
-function mousePressed() {
+function mousePressedOnCanvas() {
 	if (isMoving) return;
 	isPressed = true;
 	accX = mouseX;
