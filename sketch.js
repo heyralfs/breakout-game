@@ -38,6 +38,7 @@ function draw() {
 	if (isPressed) {
 		stroke(255, 255, 0);
 		line(accX, accY, mouseX, mouseY);
+		stroke(0);
 	}
 
 	// draw bricks
@@ -56,7 +57,7 @@ function mousePressed() {
 }
 
 function mouseReleased() {
-	if (isMoving) return;
+	if (isMoving || !isPressed) return;
 
 	const acc = createVector(accX - mouseX, accY - mouseY);
 
