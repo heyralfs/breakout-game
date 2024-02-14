@@ -18,7 +18,8 @@ function setup() {
 	const canvasSize = min(windowWidth, windowHeight) * 0.9;
 	createCanvas(canvasSize, canvasSize);
 
-	ballRadius = canvasSize / 100;
+	const brickSize = canvasSize / COLS;
+	ballRadius = brickSize / 4;
 
 	ball = new Ball({
 		x: width / 2,
@@ -28,8 +29,6 @@ function setup() {
 
 	accX = ball.position.x;
 	accY = ball.position.y;
-
-	const brickSize = canvasSize / COLS;
 
 	for (let i = 0; i < COLS; i++) {
 		for (let j = 0; j < ROWS; j++) {
@@ -69,7 +68,7 @@ function draw() {
 			(abs(ball.position.x - brick.x1) < ballRadius ||
 				abs(ball.position.x - brick.x2) < ballRadius)
 		) {
-			ball.velocity.x *= -1;
+			ball.reflect("HORIZONTAL");
 			brick.hide();
 			return;
 		}
@@ -81,7 +80,7 @@ function draw() {
 			(abs(ball.position.y - brick.y1) < ballRadius ||
 				abs(ball.position.y - brick.y2) < ballRadius)
 		) {
-			ball.velocity.y *= -1;
+			ball.reflect("VERTICAL");
 			brick.hide();
 			return;
 		}
@@ -104,7 +103,6 @@ function mouseReleased() {
 	if (isMoving || !isPressed) return;
 
 	const acc = createVector(accX - mouseX, accY - mouseY);
-
 	if (acc.mag() > MAX_VELOCITY) {
 		acc.setMag(MAX_VELOCITY);
 	}

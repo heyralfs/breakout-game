@@ -23,13 +23,13 @@ class Ball {
 			this.position.x + this.radius > width ||
 			this.position.x - this.radius < 0
 		) {
-			this.velocity.x *= -1;
+			this.reflect("HORIZONTAL");
 		}
 		if (
 			this.position.y + this.radius > height ||
 			this.position.y - this.radius < 0
 		) {
-			this.velocity.y *= -1;
+			this.reflect("VERTICAL");
 		}
 
 		// update position
@@ -44,5 +44,17 @@ class Ball {
 
 	accelerate(acc) {
 		this.velocity = acc;
+	}
+
+	reflect(direction) {
+		let n;
+		if (direction === "HORIZONTAL") {
+			n = createVector(1, 0);
+		} else if (direction === "VERTICAL") {
+			n = createVector(0, 1);
+		} else {
+			throw Error("Direction unknown");
+		}
+		this.velocity = p5.Vector.reflect(this.velocity, n);
 	}
 }
