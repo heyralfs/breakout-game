@@ -1,4 +1,4 @@
-const FRICTION = 0.01; // between 0 and 1
+const FRICTION = 0.0; // between 0 and 1
 
 const MIN_VELOCITY = 0.25;
 
