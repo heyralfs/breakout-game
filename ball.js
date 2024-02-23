@@ -1,16 +1,15 @@
 const FRICTION = 0.01; // between 0 and 1
 
 const MIN_VELOCITY = 0.25;
-const MAX_VELOCITY = 20;
-
-const INITIAL_VELOCITY = 0;
 
 class Ball {
-	constructor({ x, y, radius }) {
+	constructor({ x, y, radius, maxVelocity }) {
 		this.position = createVector(x, y);
-		this.velocity = createVector(INITIAL_VELOCITY, INITIAL_VELOCITY);
+		this.velocity = createVector();
 		this.radius = radius;
 		this.diameter = radius * 2;
+		this.maxVel = maxVelocity;
+		this.collisionCorrection = radius * 0.1;
 	}
 
 	draw() {
@@ -20,14 +19,14 @@ class Ball {
 	update() {
 		// check collision with walls
 		if (
-			this.position.x + this.radius > width ||
-			this.position.x - this.radius < 0
+			this.position.x + this.radius > width + this.collisionCorrection ||
+			this.position.x - this.radius < this.collisionCorrection
 		) {
 			this.reflect("HORIZONTAL");
 		}
 		if (
-			this.position.y + this.radius > height ||
-			this.position.y - this.radius < 0
+			this.position.y + this.radius > height + this.collisionCorrection ||
+			this.position.y - this.radius < this.collisionCorrection
 		) {
 			this.reflect("VERTICAL");
 		}
