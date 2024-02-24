@@ -1,26 +1,25 @@
-const COLS = 20;
-const ROWS = 5;
+const COLS = 15;
+const ROWS = 3;
 
 let ballRadius;
 let ball, bricks;
 
-let maxVelocity = 20;
+let maxVelocity;
 
 // mouse interaction helpers
 let accX, accY;
 
 let gameOver = false;
-
 let rounds;
 
 function start() {
 	const brickSize = width / COLS;
 	ballRadius = brickSize / 3;
-	maxVelocity = brickSize / 2;
+	maxVelocity = brickSize / 3;
 
 	ball = new Ball({
 		x: width / 2,
-		y: height - 30,
+		y: height - ballRadius,
 		radius: ballRadius,
 	});
 
@@ -34,7 +33,7 @@ function start() {
 			bricks.push(
 				new Brick({
 					x: i * brickSize,
-					y: (j + 5) * brickSize,
+					y: (j + 3) * brickSize,
 					size: brickSize,
 				})
 			);
@@ -44,8 +43,8 @@ function start() {
 	const redBrickIndex = floor(random(0, bricks.length));
 	bricks[redBrickIndex].red = true;
 
-	gameOver = false;
 	rounds = 0;
+	gameOver = false;
 }
 
 function setup() {
@@ -64,7 +63,16 @@ function draw() {
 		return;
 	}
 
+	if (bricks.filter((brick) => brick.active).length === 1) {
+		renderVictoryScreen();
+		return;
+	}
+
 	background(0);
+
+	if (rounds === 0) {
+		renderHelperText();
+	}
 
 	renderRounds();
 
@@ -106,9 +114,38 @@ function renderGameOverScreen() {
 	stroke(0);
 	strokeWeight(4);
 	textAlign(CENTER, CENTER);
-	text("Game Over", width / 2, height / 2 - textSizeRef / 2);
+	text("Game Over ☠️", width / 2, height / 2 - textSizeRef / 2);
 	textSize(textSizeRef / 2);
-	text("Click anywhere to restart", width / 2, height / 2 + textSizeRef / 2);
+	text("Click anywhere to restart.", width / 2, height / 2 + textSizeRef / 2);
+	pop();
+}
+
+function renderVictoryScreen() {
+	push();
+	const textSizeRef = height / 10;
+	textSize(textSizeRef);
+	fill(0, 255, 0);
+	stroke(0);
+	strokeWeight(4);
+	textAlign(CENTER, CENTER);
+	text("Victory! 🎉", width / 2, height / 2 - textSizeRef / 2);
+	textSize(textSizeRef / 2);
+	text(
+		`You won the game with ${rounds} moves!`,
+		width / 2,
+		height / 2 + textSizeRef / 2
+	);
+	textSize(textSizeRef / 3);
+	text(`Click anywhere to play again.`, width / 2, height / 2 + textSizeRef);
+	pop();
+}
+
+function renderHelperText() {
+	push();
+	fill(255, 255, 255);
+	textSize(height / 20);
+	textAlign(CENTER, CENTER);
+	text("Don't hit the red brick", width / 2, height / 20);
 	pop();
 }
 
@@ -132,10 +169,11 @@ function handleBrick(brick) {
 	) {
 		if (brick.red) {
 			gameOver = true;
-			return;
+			brick.draw();
+		} else {
+			ball.reflect("HORIZONTAL");
+			brick.hide();
 		}
-		ball.reflect("HORIZONTAL");
-		brick.hide();
 		return;
 	}
 	// checking y collision
@@ -147,10 +185,11 @@ function handleBrick(brick) {
 	) {
 		if (brick.red) {
 			gameOver = true;
-			return;
+			brick.draw();
+		} else {
+			ball.reflect("VERTICAL");
+			brick.hide();
 		}
-		ball.reflect("VERTICAL");
-		brick.hide();
 		return;
 	}
 	brick.draw();

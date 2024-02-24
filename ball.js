@@ -1,4 +1,4 @@
-const FRICTION = 0.0; // between 0 and 1
+const FRICTION = 0; // between 0 and 1
 
 const MIN_VELOCITY = 0.25;
 
@@ -38,6 +38,8 @@ class Ball {
 		this.velocity.mult(1 - FRICTION);
 		if (this.velocity.mag() < MIN_VELOCITY) {
 			this.velocity.setMag(0);
+		} else if (this.velocity.mag() > maxVelocity) {
+			this.velocity.setMag(maxVelocity);
 		}
 	}
 
@@ -46,14 +48,12 @@ class Ball {
 	}
 
 	reflect(direction) {
-		let n;
 		if (direction === "HORIZONTAL") {
-			n = createVector(1, 0);
+			this.velocity.x *= -1;
 		} else if (direction === "VERTICAL") {
-			n = createVector(0, 1);
+			this.velocity.y *= -1;
 		} else {
 			throw Error("Direction unknown");
 		}
-		this.velocity = p5.Vector.reflect(this.velocity, n);
 	}
 }
