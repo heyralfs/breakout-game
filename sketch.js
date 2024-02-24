@@ -10,6 +10,7 @@ let maxVelocity;
 let accX, accY;
 
 let gameOver = false;
+let won = false;
 let rounds;
 
 function start() {
@@ -45,6 +46,7 @@ function start() {
 
 	rounds = 0;
 	gameOver = false;
+	won = false;
 }
 
 function setup() {
@@ -64,6 +66,7 @@ function draw() {
 	}
 
 	if (bricks.filter((brick) => brick.active).length === 1) {
+		won = true;
 		renderVictoryScreen();
 		return;
 	}
@@ -94,7 +97,7 @@ function mousePressed() {
 }
 
 function mouseReleased() {
-	if (gameOver) {
+	if (gameOver || won) {
 		start();
 	} else {
 		const acc = createVector(accX - mouseX, accY - mouseY);
